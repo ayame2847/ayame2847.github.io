@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Portal</title>
+    <style>
+        :root {
+            --black: #1a1a1a;
+            --white: #f2f2f2;
+            --red: #e62310;
+            --blue: #014da1;
+            --yellow: #f9d000;
+            --border-width: 8px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--white); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; height: 100vh; overflow: hidden; }
+
+        /* 语言切换器 */
+        .lang-switch {
+            position: fixed; top: 20px; right: 20px; z-index: 100;
+            background: var(--black); color: var(--white);
+            padding: 8px 12px; font-weight: bold; cursor: pointer;
+            border: none; transition: 0.3s;
+        }
+        .lang-switch:hover { background: var(--red); }
+
+        /* 蒙德里安网格布局 */
+        .grid-container {
+            display: grid;
+            width: 100vw; height: 100vh;
+            grid-template-columns: 2fr 1fr 1fr;
+            grid-template-rows: 1.5fr 1fr 1fr;
+            border: var(--border-width) solid var(--black);
+            background: var(--black);
+            gap: var(--border-width);
+        }
+
+        /* 基础区块样式 */
+        .box {
+            background: var(--white);
+            display: flex; flex-direction: column; justify-content: flex-end;
+            padding: 30px; text-decoration: none; color: var(--black);
+            transition: all 0.4s ease; position: relative;
+        }
+        .box:hover { opacity: 0.9; transform: scale(0.99); }
+        .box h2 { font-size: clamp(1.5rem, 4vw, 2.5rem); font-weight: 900; line-height: 1.1; }
+        .box p { margin-top: 15px; font-size: 0.9rem; font-weight: 500; opacity: 0.8; }
+
+        /* 特定区块颜色与布局 */
+        #a-level { grid-column: 1 / 2; grid-row: 1 / 3; }
+        #a-level:hover { background: var(--red); color: var(--white); }
+
+        #notes { grid-column: 2 / 4; grid-row: 1 / 2; }
+        #notes:hover { background: var(--blue); color: var(--white); }
+
+        #life { grid-column: 2 / 3; grid-row: 2 / 4; }
+        #life:hover { background: var(--yellow); }
+
+        /* 装饰色块（纯视觉） */
+        .decor-1 { grid-column: 1 / 2; grid-row: 3 / 4; background: var(--white); }
+        .decor-2 { grid-column: 3 / 4; grid-row: 2 / 3; background: var(--white); }
+        .decor-3 { grid-column: 3 / 4; grid-row: 3 / 4; background: var(--blue); }
+
+        /* 响应式调整：视口宽度 ≤768px 时改为单列布局 */
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: repeat(3, 1fr) 50px;
+            }
+            .box, .decor-1, .decor-2, .decor-3 { grid-column: auto !important; grid-row: auto !important; }
+            .decor-1, .decor-2, .decor-3 { display: none; }
+            /* 小屏下去掉 hover 的 transform，避免缩放引发重排从而在 768px 临界处反复切换布局导致闪烁 */
+            .box:hover { transform: none; opacity: 0.92; }
+        }
+    </style>
+</head>
+<body>
+
+    <button class="lang-switch" onclick="toggleLang()">EN / 中文</button>
+
+    <div class="grid-container">
+        <a href="https://yourname.github.io/a-level-docs/" class="box" id="a-level">
+            <h2 class="txt-zh">A level / 竞赛资料</h2>
+            <h2 class="txt-en" style="display:none;">A-level & Competitions</h2>
+            <p class="txt-zh">针对学生、家长及教育从业者</p>
+            <p class="txt-en" style="display:none;">For students, parents & educators</p>
+        </a>
+
+        <a href="https://yourname.github.io/academic-notes/" class="box" id="notes">
+            <h2 class="txt-zh">数学 / 计算机 / AI 笔记</h2>
+            <h2 class="txt-en" style="display:none;">Math / CS / AI Notes</h2>
+            <p class="txt-zh">技术沉淀与合作者入口</p>
+            <p class="txt-en" style="display:none;">Notes & Collaboration</p>
+        </a>
+
+        <a href="https://yourname.github.io/life/" class="box" id="life">
+            <h2 class="txt-zh">生活</h2>
+            <h2 class="txt-en" style="display:none;">Life</h2>
+            <p class="txt-zh">日常与感悟</p>
+            <p class="txt-en" style="display:none;">Daily life & Reflections</p>
+        </a>
+
+        <div class="decor-1"></div>
+        <div class="decor-2"></div>
+        <div class="decor-3"></div>
+    </div>
+
+    <script>
+        let currentLang = 'zh';
+        function toggleLang() {
+            const zhElements = document.querySelectorAll('.txt-zh');
+            const enElements = document.querySelectorAll('.txt-en');
+            
+            if (currentLang === 'zh') {
+                zhElements.forEach(el => el.style.display = 'none');
+                enElements.forEach(el => el.style.display = 'block');
+                currentLang = 'en';
+            } else {
+                zhElements.forEach(el => el.style.display = 'block');
+                enElements.forEach(el => el.style.display = 'none');
+                currentLang = 'zh';
+            }
+        }
+    </script>
+</body>
+</html>
